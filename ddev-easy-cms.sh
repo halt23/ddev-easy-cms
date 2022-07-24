@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Author: Sam Maas
+
 initial_setup(){
 
 	if ! command -v docker >/dev/null; then
@@ -52,7 +54,7 @@ setup_vars(){
 
 setup_cms(){
 
-	if [[  $cms = "Wordpress" ]]; then
+	if $cms = "Wordpress"; then
 
 		mkdir -p $path_dir
 		cd $path_dir
@@ -63,7 +65,7 @@ setup_cms(){
 		
 	fi
 
-	if [[ $cms = "Drupal" ]]; then
+	if $cms = "Drupal"; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -79,7 +81,7 @@ setup_cms(){
 	fi
 
 
-	if [[ $cms = "Typo3" ]]; then
+	if $cms = "Typo3"; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -88,11 +90,14 @@ setup_cms(){
 		ddev composer create "typo3/cms-base-distribution:^11"
 		cd public
 		touch FIRST_INSTALL
+		cd ..
+		ddev launch
 
 	fi
 
 
 }
+
 initial_setup
 setup_vars
 setup_cms
