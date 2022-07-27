@@ -2,6 +2,16 @@
 
 # Author: Sam Maas
 
+# check if user is root
+
+if [ "$(id -u)" = 0 ]; then
+	echo "################################"
+	echo "Do not run this script as root."
+	echo "script will now exit"
+	echo "###############################"
+	exit 1
+fi
+
 # setup docker 
 echo "#################"
 echo "installing docker"
@@ -35,6 +45,14 @@ if pacman -Qi yay &> /dev/null; then
 
 elif pacman -Qi trizen &> /dev/null; then
 	trizen -S --noconfirm --needed --noedit $package
+
+else 
+	echo "##################################"
+	echo "trizen or pacman are not installed"
+	echo "please install trizen or pacman"
+	echo "###############################"
+	echo "script wil now exit..."
+	exit 1
 
 fi
 echo "#############"
