@@ -54,7 +54,7 @@ setup_vars(){
 
 setup_cms(){
 
-	if $cms = "Wordpress"; then
+	if [[ $cms = "Wordpress" ]]; then
 
 		mkdir -p $path_dir
 		cd $path_dir
@@ -63,9 +63,8 @@ setup_cms(){
 		ddev wp core download
 		ddev launch
 		
-	fi
 
-	if $cms = "Drupal"; then
+	elif [[ $cms = "Drupal" ]]; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -78,10 +77,8 @@ setup_cms(){
 		ddev drush uli
 		ddev launch
 
-	fi
 
-
-	if $cms = "Typo3"; then
+	elif [[ $cms = "Typo3" ]]; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -92,6 +89,11 @@ setup_cms(){
 		touch FIRST_INSTALL
 		cd ..
 		ddev launch
+
+	else
+		echo "no cms selected re run the script and select one from drop down"
+		exit 1
+
 
 	fi
 
