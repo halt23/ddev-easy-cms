@@ -2,6 +2,28 @@
 
 # Author: Sam Maas
 
+
+noCancel=false
+
+
+cancel_pressed(){
+
+
+	Rc=$?
+
+	if [[ $Rc = "1" ]]; then
+		zenity --question --text="Are you sure you want to quit"
+		Rc=$?
+		echo $Rc
+		if [[ $Rc = "0" ]]; then
+			exit 1
+		fi
+		noCancel=false
+		setup_vars
+		
+	fi
+}
+
 initial_setup(){
 
 	if ! command -v docker >/dev/null; then
@@ -44,10 +66,20 @@ if ! command -v zenity >/dev/null; then
 
 setup_vars(){
 
-	dir=`zenity --entry --text="enter name of project directory(do not enter a path)" --title="project directory"`
-	path=`zenity --file-selection --directory --title="Select location to initialize the project directory $dir"`
-	cms=`zenity --forms --title "Select cms" --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
-	path_dir="$path/$dir"
+	
+
+	while [[ $noCancel = false ]]; do
+
+		dir=`zenity --entry --text="enter name of project directory(do not enter a path)" --title="project directory"`
+		cancel_pressed
+		path=`zenity --file-selection --directory --title="Select location to initialize the project directory $dir"`
+		cancel_pressed
+		cms=`zenity --forms --title "Select cms" --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
+		cancel_pressed
+		path_dir="$path/$dir"
+		noCancel=true
+
+	done
 
 }
 
