@@ -16,11 +16,12 @@ fi
 echo "#################"
 echo "installing docker"
 echo "#################"
-sudo pacman -S --noconfirm --needed docker 
+sudo pacman -S --noconfirm --needed docker
+sudo pacman -S --noconfirm --needed docker-compose  
 sudo systemctl enable docker 
 sudo systemctl start docker
 
-# just to be sure the group exist 
+# just to be sure the docker group exist 
 echo "#####################"
 echo "creating docker group"
 echo "#####################"
@@ -60,7 +61,6 @@ echo  "add ca certs"
 echo "#############"
 mkcert -install
 
-sleep 1
 echo "#######################"
 echo "Now reboot your system."
 echo "#######################"

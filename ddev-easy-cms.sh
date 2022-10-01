@@ -2,6 +2,27 @@
 
 # Author: Sam Maas
 
+cancel=false
+
+
+rc_check() {
+
+	case $? in
+		 1)
+			
+			zenity --question \
+			--text="Are you sure you wish to quit?"
+			if [[ $? == 0 ]]; then
+				exit 1
+			else
+				setup_vars
+
+			fi
+	esac
+
+}
+
+
 initial_setup(){
 
 	if ! command -v docker >/dev/null; then
@@ -44,17 +65,27 @@ if ! command -v zenity >/dev/null; then
 
 setup_vars(){
 
-	dir=`zenity --entry --text="enter name of project directory(do not enter a path)" --title="project directory"`
-	path=`zenity --file-selection --directory --title="Select location to initialize the project directory $dir"`
-	cms=`zenity --forms --title "Select cms" --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
-	path_dir="$path/$dir"
+	
+
+	while [[ $cancel == false ]]; do
+
+		dir=`zenity --entry --text="enter name of project directory(do not enter a path)" --title="project directory"`
+		rc_check
+		path=`zenity --file-selection --directory --title="Select location to initialize the project directory $dir"`
+		rc_check
+		cms=`zenity --forms --title="Select cms" --text=" " --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
+		rc_check
+		path_dir="$path/$dir"
+		cancel=true
+
+	done
 
 }
 
 
 setup_cms(){
 
-	if $cms = "Wordpress"; then
+	if [[ $cms = "Wordpress" ]]; then
 
 		mkdir -p $path_dir
 		cd $path_dir
@@ -63,9 +94,8 @@ setup_cms(){
 		ddev wp core download
 		ddev launch
 		
-	fi
 
-	if $cms = "Drupal"; then
+	elif [[ $cms = "Drupal" ]]; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -78,10 +108,8 @@ setup_cms(){
 		ddev drush uli
 		ddev launch
 
-	fi
 
-
-	if $cms = "Typo3"; then
+	elif [[ $cms = "Typo3" ]]; then
 	
 		mkdir -p $path_dir
 		cd $path_dir
@@ -93,6 +121,11 @@ setup_cms(){
 		cd ..
 		ddev launch
 
+	else
+		echo "no cms selected re run the script and select one from drop down"
+		exit 1
+
+
 	fi
 
 
@@ -101,3 +134,4 @@ setup_cms(){
 initial_setup
 setup_vars
 setup_cms
+
