@@ -73,7 +73,7 @@ setup_vars(){
 		rc_check
 		path=`zenity --file-selection --directory --title="Select location to initialize the project directory $dir"`
 		rc_check
-		cms=`zenity --forms --title "Select cms" --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
+		cms=`zenity --forms --title="Select cms" --text=" " --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
 		rc_check
 		path_dir="$path/$dir"
 		cancel=true
@@ -135,4 +135,3 @@ initial_setup
 setup_vars
 setup_cms
 
-EOF
