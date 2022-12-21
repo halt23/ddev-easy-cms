@@ -137,15 +137,10 @@ setup_cms(){
 
 }
 
-dev(){
 
-	mkdir $path_dir/tools
-
-
-}
 
 initial_setup
 setup_vars
 setup_cms
-# dev
+
 
