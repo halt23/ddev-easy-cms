@@ -121,6 +121,7 @@ setup_cms(){
 		ddev config --project-type=typo3 --docroot=public --create-docroot
 		ddev start
 		ddev composer create "typo3/cms-base-distribution" --no-install -y
+		ddev composer install
 		cd public
 		touch FIRST_INSTALL
 		cd ..
