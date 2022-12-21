@@ -3,6 +3,7 @@
 # Author: Sam Maas
 
 cancel=false
+CWD=$(pwd)
 
 
 rc_check() {
@@ -76,6 +77,8 @@ setup_vars(){
 		cms=`zenity --forms --title="Select cms" --text=" " --add-combo "chose cms." --combo-values "Typo3|Drupal|Wordpress"`
 		rc_check
 		path_dir="$path/$dir"
+		url="https://$dir.ddev.site"
+
 		cancel=true
 
 	done
@@ -92,7 +95,8 @@ setup_cms(){
 		ddev config --project-type=wordpress
 		ddev start
 		ddev wp core download
-		ddev launch
+		cd $CWD
+		source ./gui.sh
 		
 
 	elif [[ $cms = "Drupal" ]]; then
@@ -106,7 +110,8 @@ setup_cms(){
 		ddev composer install
 		ddev drush site:install -y
 		ddev drush uli
-		ddev launch
+		cd $CWD
+		source ./gui.sh
 
 
 	elif [[ $cms = "Typo3" ]]; then
@@ -115,11 +120,12 @@ setup_cms(){
 		cd $path_dir
 		ddev config --project-type=typo3 --docroot=public --create-docroot
 		ddev start
-		ddev composer create "typo3/cms-base-distribution:^11"
+		ddev composer create "typo3/cms-base-distribution" --no-install -y
 		cd public
 		touch FIRST_INSTALL
 		cd ..
-		ddev launch
+		cd $CWD
+		source ./gui.sh
 
 	else
 		echo "no cms selected re run the script and select one from drop down"
@@ -131,7 +137,15 @@ setup_cms(){
 
 }
 
+dev(){
+
+	mkdir $path_dir/tools
+
+
+}
+
 initial_setup
 setup_vars
 setup_cms
+# dev
 
